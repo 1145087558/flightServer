@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.flight.dao.FlightInfoDao">
+	<resultMap type="FlightInfo" id="resultmap">
+		<id property="flightNumber" column="flight_number" />
+		<result property="dayTime" column="day_time" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<result property="rangeType" column="range_type" />
+		<result property="modelType" column="model_type" />
+		<result property="departure" column="departure" />
+		<result property="destination" column="destination" />
+		<result property="airline" column="airline" />
+
+		<collection property="cabins" ofType="FlightCabin">
+			<id property="id" column="id" />
+			<result property="shippingSpace" column="shipping_space" />
+			<result property="facePrice" column="face_price" />
+			<result property="concessionalPrice"
+				column="concessional_price" />
+			<result property="discount" column="discount" />
+			<result property="seatNumber" column="seat_number" />
+			<result property="flightId" column="flight_id" />
+		</collection>
+
+	</resultMap>
+
+
+	<select id="searchList" resultMap="resultmap">
+		select * from flight_info f1,flight_cabin f2 where f1.flightNumber =
+		f2.flightId
+
+	</select>
+</mapper>
