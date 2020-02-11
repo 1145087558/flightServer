@@ -4,7 +4,7 @@ public class AlipayConfig {
     // 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数
     public static String return_url = "";
     // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-    public static String notify_url = "http://localhost:8080/OnlineShop/notify";
+    public static String notify_url = "";
     // 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
     public static String app_id = "2016091600521080";
     // 应用公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。

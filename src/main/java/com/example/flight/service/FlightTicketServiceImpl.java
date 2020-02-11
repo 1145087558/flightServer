@@ -81,7 +81,7 @@ public class FlightTicketServiceImpl implements FlightTicketService{
 	}
 
 	@Override
-	public void pay(int ticketId, HttpServletResponse response) throws IOException {
+	public void pay(int ticketId,HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		FlightTicket ticket = dao.selectById(ticketId);
 		
@@ -91,8 +91,7 @@ public class FlightTicketServiceImpl implements FlightTicketService{
                 AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key,
                 AlipayConfig.sign_type);
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
-        alipayRequest.setReturnUrl("http://localhost:8080/paysuccess.action/"+ticket.getId());
-        alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
+        alipayRequest.setReturnUrl("http://localhost:80/flight/subscribe/paysuccess.html");
         String body = ticket.getDeparture()+"--- "+ticket.getDestination()+"\r\n"+
         simpleDateFormat.format(ticket.getStartTime())+"---"+simpleDateFormat.format(ticket.getEndTime());
         alipayRequest.setBizContent("{\"out_trade_no\":\"" + orderSn + "\"," + "\"total_amount\":\""
@@ -104,27 +103,31 @@ public class FlightTicketServiceImpl implements FlightTicketService{
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        request.getSession().setAttribute("flightId",ticketId);
 		response.setContentType("text/html;charset=UTF-8");
         response.getWriter().write(alipayResponse.getBody());
 	}
 
 	@Override
-	public void paySuccess(int flightId) {
+	public void paySuccess(HttpServletRequest request) {
+		int flightId = (int)request.getSession().getAttribute("flightId");
 		FlightTicket ticket = dao.selectById(flightId);
 		ticket.setOrderStatus("已支付");
 		dao.updateById(ticket);
 	}
 
 	@Override
-	public void alipayRefundRequest(String out_trade_no, String trade_no, double refund_amount) {
+	public String alipayRefundRequest(String out_trade_no, String trade_no, double refund_amount) {
 
 		//out_trade_no 订单支付时传入的商户订单号,不能和支付宝交易号（trade_no）同时为空
 		//out_request_no 标识一次退款请求,如需部分退款,则此参数必传
 
 		String out_request_no="HZ01RF001";
+		refund_amount = refund_amount * 0.5;
+		System.out.println(refund_amount);
 		try {
 			AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id,
-					AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key,
+					AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.zifubao_public_key,
 					AlipayConfig.sign_type);
 			AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 			request.setBizContent("{" +
@@ -139,11 +142,19 @@ public class FlightTicketServiceImpl implements FlightTicketService{
 			response = alipayClient.execute(request);
 			if (response.isSuccess()) {
 				System.out.println("支付宝退款成功");
+				QueryWrapper<FlightTicket> queryWrapper = new QueryWrapper<>();
+				queryWrapper.eq("order_number", out_trade_no);
+				FlightTicket ticket = new FlightTicket().setOrderStatus("已退款");
+				dao.update(ticket,queryWrapper);
+				return "退款成功";
 			} else {
-				//response.getSubMsg();//失败会返回错误信息
+				//response.getSubMsg();//失败会返回错误信息(出现交易信息被篡改一般是同一个订单被多次退款)
+				System.out.println(response.getSubMsg());
+				return "退款失败";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "退款失败";
 		}
 	}
 

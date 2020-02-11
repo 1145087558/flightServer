@@ -44,13 +44,13 @@ public class OrderController {
 	}
 	
 	@GetMapping("zifubaoPay.action/{ticketId}")
-	public void zifubaoPay(@PathVariable int ticketId,HttpServletResponse response) throws IOException {
-		service.pay(ticketId,response);
+	public void zifubaoPay(@PathVariable int ticketId,HttpServletRequest request,HttpServletResponse response) throws IOException {
+		service.pay(ticketId,request,response);
 	}
 	
-	@GetMapping("paysuccess.action/{ticketId}")
-	public void paySuccess(@PathVariable int ticketId) {
-		service.paySuccess(ticketId);
+	@PutMapping("paysuccess.action")
+	public void paySuccess(HttpServletRequest request) {
+		service.paySuccess(request);
 	}
 
 	@GetMapping("searchTicketStatus.action/{ticketId}")
@@ -76,8 +76,9 @@ public class OrderController {
 	}
 
 	@PutMapping("alipayRefundRequest.action/out_trade_no/{out_trade_no}/refund_amount/{refund_amount}")
-	public void alipayRefundRequest(@PathVariable("out_trade_no") String out_trade_no,@PathVariable("refund_amount") double refund_amount) {
-		service.alipayRefundRequest(out_trade_no,"", refund_amount);
+	public String alipayRefundRequest(@PathVariable("out_trade_no") String out_trade_no,@PathVariable("refund_amount") double refund_amount) {
+		System.out.println(out_trade_no);
+		return service.alipayRefundRequest(out_trade_no,"", refund_amount);
 	}
 
 
