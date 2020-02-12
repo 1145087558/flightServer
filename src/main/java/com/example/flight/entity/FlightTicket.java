@@ -49,6 +49,8 @@ public class FlightTicket implements Serializable{
 	@TableField(value="price")
 	private String price;
 	@TableField(value="order_time")
+	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date orderTime;
 	@TableField(value="order_status")
 	private String orderStatus;

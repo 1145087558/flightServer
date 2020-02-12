@@ -22,7 +22,7 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
-	@GetMapping("login.action")
+	@PostMapping("login.action")
 	public void login(User user,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		user = service.login(user);
 		response.setCharacterEncoding("UTF-8");
@@ -38,10 +38,13 @@ public class UserController {
 	}
 	
 	@PostMapping("register.action")
-	public void register(HttpServletRequest request,User user) {
+	public void register(HttpServletRequest request,HttpServletResponse response,User user) {
 		//service.register(user);
 		System.out.println(user);
 		request.getSession().setAttribute("user", user);
+		Cookie cookie = new Cookie("user",user.getUserName());
+		cookie.setPath("/");
+		response.addCookie(cookie);
 	}
 	
 	@RequestMapping("sendPhoneCode.action")

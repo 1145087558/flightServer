@@ -37,10 +37,11 @@ public class WebConfigurer implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// addPathPatterns("/**") 表示拦截所有的请求，
-		// excludePathPatterns("/login", "/register") 表示除了登陆与注册之外，因为登陆注册不需要登陆也可以访问
+		// excludePathPatterns("/login", "/register") 表示除了登陆与注册之外
 		
-		registry.addInterceptor(loginInterceptor).addPathPatterns("/subscribeInfo","/placeorder","/orderlist",
-				"/zifubaoPay");
+		registry.addInterceptor(loginInterceptor).addPathPatterns("/**").
+				excludePathPatterns("/serachByWeek.action/*","/getFlighInfo.action","/getDateWeek.action",
+				"/serachList.action","/login.action","/sendPhoneCode.action","/checkCode.action","/register.action");
 	}
 
 	//用来注册日期转换器

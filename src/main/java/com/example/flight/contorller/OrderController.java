@@ -11,6 +11,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.example.flight.entity.FlightData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,19 +28,17 @@ public class OrderController {
 	
 	
 	@PostMapping("placeOrder.action")
-	public int placeOrder(FlightTicket flightTicket,int cabinId) {
-		//User user = (User)request.getSession().getAttribute("user");
-		User user = new User().setId(1);
+	public int placeOrder(FlightTicket flightTicket,int cabinId,HttpServletRequest request) {
+		User user = (User)request.getSession().getAttribute("user");
 		flightTicket = service.placeOrder(flightTicket,cabinId,user.getId());
-
 		return flightTicket.getId();
 	}
 
-	@GetMapping("searchOrder.action/{orderId}")
-	public Map<String,Object> searchOrder(@PathVariable int orderId){
+	@GetMapping("searchOrder.action/ticketId/{ticketId}")
+	public Map<String,Object> searchOrder(@PathVariable int ticketId){
 
 		Map<String,Object> result = new HashMap<>();
-		result.put("flightInfo",service.getTicketById(orderId));
+		result.put("flightInfo",service.getTicketById(ticketId));
 		return result;
 	}
 	
@@ -62,8 +61,7 @@ public class OrderController {
 
 	@GetMapping("orderList.action")
 	public Map<String,Object> orderList(HttpServletRequest request) {
-		//User user = (User)request.getSession().getAttribute("user");
-		User user = new User().setId(1);
+		User user = (User)request.getSession().getAttribute("user");
 		Map<String,Object> result = new HashMap<>();
 		result.put("flightInfo",service.getTicketByUserId(user.getId()));
 		return result;
