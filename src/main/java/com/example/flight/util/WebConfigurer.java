@@ -1,6 +1,9 @@
 package com.example.flight.util;
 
+import com.example.flight.listener.RequestListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -16,9 +19,10 @@ public class WebConfigurer implements WebMvcConfigurer {
 
 	@Autowired
 	private LoginInterceptor loginInterceptor;
-
 	@Autowired
 	private DateConverter dateConverter;
+	@Autowired
+	private RequestListener requestListener;
 
 
 	@Override
@@ -49,6 +53,15 @@ public class WebConfigurer implements WebMvcConfigurer {
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(dateConverter);
 	}
-	
-	
+
+	//注册监听器
+	//也可以@WebListener注解来实现，启动类添加@ServletComponentScan注解
+	@Bean
+	public ServletListenerRegistrationBean<RequestListener> servletListenerRegistrationBean() {
+		ServletListenerRegistrationBean<RequestListener> servletListenerRegistrationBean = new ServletListenerRegistrationBean<>();
+		servletListenerRegistrationBean.setListener(requestListener);
+		return servletListenerRegistrationBean;
+	}
+
+
 }

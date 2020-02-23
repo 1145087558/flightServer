@@ -29,5 +29,7 @@ public class User implements Serializable{
 	private String phone;
 	@TableField(value="user_email")
 	private String email;
+	@TableField(value="user_status")
+	private Integer status;
 	
 }
