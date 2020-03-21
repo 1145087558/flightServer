@@ -3,9 +3,9 @@ package com.example.flight.service;
 import java.util.Date;
 import java.util.List;
 
-import com.example.flight.entity.FlightCabin;
-import com.example.flight.entity.FlightData;
-import com.example.flight.entity.FlightInfo;
+import com.example.flight.model.flight.FlightCabin;
+import com.example.flight.model.flight.FlightData;
+import com.example.flight.model.flight.FlightInfo;
 
 public interface FlightInfoService {
 

@@ -55,6 +55,8 @@ spring:
         url-pattern: /*
         # 忽略过滤格式
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+
+  #redis配置
   redis:
     host: 127.0.0.1
     port: 6379
@@ -67,13 +69,16 @@ spring:
         min-idle: 0
     lettuce:
       shutdown-timeout: 0s
+
+  #热部署配置
   devtools:
     restart:
       enabled: true
       additional-paths: src/main/java
       additional-exclude:
 
-#mybatis:
+
+  #mybatis:
   #type-aliases-package: com.example.demo.pojo
   #mapper-locations: classpath:/mybatis/mappers/*.xml
   #开启驼峰映射
@@ -81,11 +86,27 @@ spring:
     #map-underscore-to-camel-case: true
 
 
+
 mybatis-plus:
-  type-aliases-package: com.example.flight.entity
+  type-aliases-package: com.example.flight.model
   mapper-locations: classpath:/mybatis/mappers/*.xml
   #开启驼峰映射
   configuration:
     map-underscore-to-camel-case: true
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: my-group
+
+
+#logback日志配置
+logging:
+  level:
+    com.example.flight: info
+    root: info
+  file: D:/IDEA/project-log/flight/my.log
+  #pattern:
+    #console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"
+    #file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"

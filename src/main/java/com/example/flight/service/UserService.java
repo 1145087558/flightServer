@@ -2,12 +2,21 @@ package com.example.flight.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.example.flight.entity.User;
+import com.example.flight.model.user.UserInfo;
+
+import java.util.List;
 
 public interface UserService {
 
-	public User login(User user);
-	public void register(User user);
-	public boolean sendPhoneCode(HttpServletRequest request) throws Exception;
-	public boolean checkCode(HttpServletRequest request);
+	UserInfo login(UserInfo user);
+	UserInfo manageLogin(UserInfo user);
+	void register(UserInfo user);
+	boolean sendPhoneCode(HttpServletRequest request) throws Exception;
+	boolean checkCode(HttpServletRequest request);
+	List<UserInfo> getUserAllList();
+	void modifyStatus(int userId,int status);
+	void modifyUser(UserInfo user);
+	UserInfo getUserById(int userId);
+	void deleteUser(Integer userId);
+	List<UserInfo> getUserDeleteList();
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.flight.entity.FlightInfo;
+import com.example.flight.model.flight.FlightInfo;
 
 @Mapper
 public interface FlightInfoDao extends BaseMapper<FlightInfo>{

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.example.flight.entity.FlightTicket;
+import com.example.flight.model.order.FlightTicket;
 
 public interface FlightTicketService {
 
